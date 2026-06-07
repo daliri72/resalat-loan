@@ -1,0 +1,6 @@
+{
+  "name": "Loan Installment and Score Calculator",
+  "description": "فارسی - محاسبه‌گر توان بازپرداخت، خرید امتیاز، مبالغ اقساط، مبالغ سفته و عایدی خالص وام طبق فرمول‌های درخواستی",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
