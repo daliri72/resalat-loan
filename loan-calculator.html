@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سیستم محاسبه تسهیلات و امتیاز اعتباری</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.rtl.min.css" />
+  <style>
+    :root {
+      --clr-bg: #f7f8fa;
+      --clr-surface: #ffffff;
+      --clr-border: #d1d5db;
+      --clr-header-bg: #1a2332;
+      --clr-header-text: #ffffff;
+      --clr-accent: #2563eb;
+      --clr-text: #1e2530;
+      --clr-muted: #6b7280;
+      --clr-row-alt: #f0f4f8;
+      --radius: 6px;
+      --font-fa: 'Tahoma', 'Arial', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      font-family: var(--font-fa);
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ── Header ── */
+    .app-header {
+      background: var(--clr-header-bg);
+      color: var(--clr-header-text);
+      padding: 22px 32px 18px;
+      border-bottom: 3px solid var(--clr-accent);
+    }
+    .app-header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      letter-spacing: 0.01em;
+    }
+    .app-header p {
+      font-size: 0.82rem;
+      margin: 0;
+      color: #b0bac8;
+    }
+
+    /* ── Controls ── */
+    .controls-wrap {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin: 20px auto;
+      max-width: 960px;
+    }
+    .controls-wrap label {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--clr-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .controls-wrap .form-control {
+      border-radius: 4px;
+      border: 1px solid var(--clr-border);
+      font-family: var(--font-fa);
+      font-size: 0.92rem;
+      text-align: left;
+      direction: ltr;
+      letter-spacing: 0.03em;
+      padding: 7px 12px;
+    }
+    .controls-wrap .form-control:focus {
+      border-color: var(--clr-accent);
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.12);
+    }
+    .btn-calc {
+      background: var(--clr-accent);
+      border: none;
+      color: #fff;
+      font-family: var(--font-fa);
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 8px 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-calc:hover { background: #1d4ed8; }
+    .btn-print {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      color: var(--clr-text);
+      font-family: var(--font-fa);
+      font-size: 0.88rem;
+      padding: 8px 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .btn-print:hover { border-color: #9ca3af; }
+
+    /* ── Table wrapper ── */
+    .table-wrap {
+      max-width: 960px;
+      margin: 0 auto 32px;
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table {
+      margin: 0;
+      font-size: 0.82rem;
+    }
+    .table thead th {
+      background: var(--clr-header-bg) !important;
+      color: #e5eaf2 !important;
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-align: center;
+      padding: 10px 8px;
+      border-color: #2d3a4a !important;
+      white-space: nowrap;
+    }
+    .table tbody tr:nth-child(odd)  td { background: #ffffff; }
+    .table tbody tr:nth-child(even) td { background: var(--clr-row-alt); }
+    .table tbody tr:hover td { background: #dbeafe; }
+    .table tbody td {
+      text-align: center;
+      padding: 7px 8px;
+      border-color: #e5e7eb !important;
+      vertical-align: middle;
+      font-variant-numeric: tabular-nums;
+    }
+    .table tbody td:first-child { color: var(--clr-muted); font-size: 0.75rem; }
+    .table tbody td:nth-child(2) { font-weight: 700; color: var(--clr-accent); }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; font-size: 11px; }
+      .app-header { background: #fff !important; color: #000 !important; border-bottom: 2px solid #000; padding: 10px 0; }
+      .app-header h1 { font-size: 1rem; color: #000; }
+      .app-header p { color: #333; }
+      .controls-wrap, .btn-calc, .btn-print { display: none !important; }
+      .table-wrap { border: 1px solid #000; border-radius: 0; margin: 10px 0; max-width: 100%; }
+      .table { width: 100%; }
+      .table thead th { background: #000 !important; color: #fff !important; font-size: 9px; padding: 5px 4px; border-color: #000 !important; }
+      .table tbody td { font-size: 9px; padding: 4px; border: 1px solid #555 !important; }
+      .table tbody tr:nth-child(odd)  td { background: #fff !important; }
+      .table tbody tr:nth-child(even) td { background: #f2f2f2 !important; }
+      .table tbody td:nth-child(2) { color: #000; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <h1>سیستم محاسبه تسهیلات و امتیاز اعتباری</h1>
+    <p>برآورد جدول اقساط و هزینه‌های خرید امتیاز از دوره زمان‌بندی ۱۰ الی ۳۶ ماهه</p>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls-wrap">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-sm-4">
+        <label for="inp-repay">توان بازپرداخت (تومان)</label>
+        <input type="text" id="inp-repay" class="form-control" value="10,000,000" inputmode="numeric" />
+      </div>
+      <div class="col-12 col-sm-4">
+        <label for="inp-point">مبلغ خرید امتیاز (تومان)</label>
+        <input type="text" id="inp-point" class="form-control" value="200,000" inputmode="numeric" />
+      </div>
+      <div class="col-12 col-sm-4 d-flex gap-2">
+        <button class="btn-calc" onclick="calculate()">محاسبه</button>
+        <button class="btn-print" onclick="window.print()">چاپ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table class="table table-bordered" id="result-table">
+      <thead>
+        <tr>
+          <th>ردیف</th>
+          <th>تعداد<br/>اقساط</th>
+          <th>مبلغ وام<br/>(تومان)</th>
+          <th>مقدار موردنیاز<br/>امتیاز</th>
+          <th>خرید امتیاز<br/>(تومان)</th>
+          <th>مبلغ قسط<br/>(تومان)</th>
+          <th>خالص<br/>(تومان)</th>
+          <th>مبلغ خرید سفته<br/>(۱۲۰٪)</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    // ── Helpers ──────────────────────────────────────────────
+    const toFA = n => n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+    function formatNum(n) {
+      // Round to nearest integer, then format with commas, then convert to Persian digits
+      const rounded = Math.round(n);
+      const withCommas = rounded.toLocaleString('en-US');
+      return toFA(withCommas);
+    }
+
+    function parseInput(id) {
+      const raw = document.getElementById(id).value.replace(/,/g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+      return parseFloat(raw) || 0;
+    }
+
+    function addThousandSep(el) {
+      el.addEventListener('input', function () {
+        const pos = this.selectionStart;
+        const raw = this.value.replace(/,/g, '').replace(/[^0-9]/g, '');
+        if (!raw) { this.value = ''; return; }
+        const formatted = parseInt(raw, 10).toLocaleString('en-US');
+        this.value = formatted;
+      });
+    }
+
+    // ── Init inputs ──────────────────────────────────────────
+    addThousandSep(document.getElementById('inp-repay'));
+    addThousandSep(document.getElementById('inp-point'));
+
+    // ── Calculate ────────────────────────────────────────────
+    function calculate() {
+      const repay = parseInput('inp-repay');
+      const pointPrice = parseInput('inp-point');
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+
+      for (let n = 10; n <= 36; n++) {
+        const row = n - 9; // 1-based index
+
+        const loan        = repay * n;
+        const pointsNeeded = ((loan / 1_000_000) * n) / 10;
+        const buyCost     = pointsNeeded * pointPrice;
+        const instalment  = loan / n;
+        const net         = loan - buyCost;
+        const promissory  = loan * 1.2;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${toFA(row)}</td>
+          <td>${toFA(n)}</td>
+          <td>${formatNum(loan)}</td>
+          <td>${formatNum(pointsNeeded)}</td>
+          <td>${formatNum(buyCost)}</td>
+          <td>${formatNum(instalment)}</td>
+          <td>${formatNum(net)}</td>
+          <td>${formatNum(promissory)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    // ── Run on load ───────────────────────────────────────────
+    calculate();
+  </script>
+
+</body>
+</html>
